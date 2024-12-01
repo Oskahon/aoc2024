@@ -6,7 +6,7 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "checkJs": true,
     "allowJs": true,
     "jsx": "react",
@@ -14,7 +14,7 @@
     "moduleResolution": "node"
   },
   "include": [
-    "src/**/*"
+    "*"
   ],
   "exclude": [
     "./node_modules",
