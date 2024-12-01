@@ -12,8 +12,8 @@ lines.forEach(line => {
     list2.push(Number(id2));
 });
 
-list1.sort();
-list2.sort();
+list1.sort((a, b) => a - b);
+list2.sort((a, b) => a - b);
 
 let sum = 0;
 
