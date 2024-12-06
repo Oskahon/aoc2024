@@ -5,10 +5,6 @@ const fs = require('fs');
 
 const FILE = 'data.txt';
 
-// Part 2 preformance improvement idea:
-// Instead of running the whole guard route for every possible obstacle position looking for loops
-// check if adding an obstacle to a position creates a rectangle with existing obstacles
-
 function main() {
     const map = getMap(FILE);
     const guard = createGuard(map);
