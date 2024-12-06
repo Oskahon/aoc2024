@@ -38,31 +38,36 @@ function run(map, guard) {
  * @returns {Number}
  */
 function runPart2(map) {
+    const firstGuard = createGuard(map);
+    run(map, firstGuard);
+    const visitedPositions = firstGuard.visited;
+
     let positions = 0;
 
-    for (let y = 0; y < map.height; y++) {
-        for (let x = 0; x < map.width; x++) {
-            const guard = createGuard(map);
+    for (const position of visitedPositions) {
+        const [y, x] = position.split(',').map(Number);
 
-            if (map.grid[y][x] === '#' || map.grid[y][x] === '^') {
-                continue;
-            }
-            map.grid[y][x] = '#';
-
-            let loop = false;
-            while (!guard.leftTheMap) {
-                loop = move(map, guard, true);
-                if (loop) {
-                    break;
-                }
-            }
-
-            if (loop) {
-                positions++;
-            }
-
-            map.grid[y][x] = '.';
+        if (map.grid[y][x] === '^') {
+            continue;
         }
+
+        const guard = createGuard(map);
+
+        map.grid[y][x] = '#';
+
+        let loop = false;
+        while (!guard.leftTheMap) {
+            loop = move(map, guard, true);
+            if (loop) {
+                break;
+            }
+        }
+
+        if (loop) {
+            positions++;
+        }
+
+        map.grid[y][x] = '.';
     }
 
     return positions;
