@@ -83,30 +83,31 @@ function move(map, guard, checkForLoop = false) {
         case 'up':
             if (checkCollision(map, guard)) {
                 guard.direction = 'right';
-            } else {
-                guard.posY -= 1;
-                if (checkForLoop) {
-                    if (checkRepeat(guard)) {
-                        return true;
-                    }
-                    guard.dirYX.get('up').add(posToString(guard.posY, guard.posX));
-                } else {
-                    guard.visited.add(posToString(guard.posY, guard.posX));
-                }
-
-            }
-            break;
-        case 'right':
-            if (checkCollision(map, guard)) {
-                guard.direction = 'down';
-            } else {
-                guard.posX += 1;
                 if (checkForLoop) {
                     if (checkRepeat(guard)) {
                         return true;
                     }
                     guard.dirYX.get('right').add(posToString(guard.posY, guard.posX));
-                } else {
+                }
+            } else {
+                guard.posY -= 1;
+                if (!checkForLoop) {
+                    guard.visited.add(posToString(guard.posY, guard.posX));
+                }
+            }
+            break;
+        case 'right':
+            if (checkCollision(map, guard)) {
+                guard.direction = 'down';
+                if (checkForLoop) {
+                    if (checkRepeat(guard)) {
+                        return true;
+                    }
+                    guard.dirYX.get('down').add(posToString(guard.posY, guard.posX));
+                }
+            } else {
+                guard.posX += 1;
+                if (!checkForLoop) {
                     guard.visited.add(posToString(guard.posY, guard.posX));
                 }
             }
@@ -114,14 +115,15 @@ function move(map, guard, checkForLoop = false) {
         case 'down':
             if (checkCollision(map, guard)) {
                 guard.direction = 'left';
-            } else {
-                guard.posY += 1;
                 if (checkForLoop) {
                     if (checkRepeat(guard)) {
                         return true;
                     }
-                    guard.dirYX.get('down').add(posToString(guard.posY, guard.posX));
-                } else {
+                    guard.dirYX.get('left').add(posToString(guard.posY, guard.posX));
+                }
+            } else {
+                guard.posY += 1;
+                if (!checkForLoop) {
                     guard.visited.add(posToString(guard.posY, guard.posX));
                 }
             }
@@ -129,14 +131,15 @@ function move(map, guard, checkForLoop = false) {
         case 'left':
             if (checkCollision(map, guard)) {
                 guard.direction = 'up';
-            } else {
-                guard.posX -= 1;
                 if (checkForLoop) {
                     if (checkRepeat(guard)) {
                         return true;
                     }
-                    guard.dirYX.get('left').add(posToString(guard.posY, guard.posX));
-                } else {
+                    guard.dirYX.get('up').add(posToString(guard.posY, guard.posX));
+                }
+            } else {
+                guard.posX -= 1;
+                if (!checkForLoop) {
                     guard.visited.add(posToString(guard.posY, guard.posX));
                 }
             }
