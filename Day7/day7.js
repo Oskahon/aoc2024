@@ -22,30 +22,18 @@ function main() {
 /**
  * 
  * @param {Array} lines 
- * @param {Boolean} combinator
+ * @param {Boolean} part2
  * @returns {Number}
  */
-function run(lines, combinator = false) {
+function run(lines, part2 = false) {
     let sum = 0;
 
     for (const line of lines) {
         const answer = line[0];
         const values = line.slice(1);
-        const delimCount = values.length - 1;
 
-        const combinations = getCombinations(delimCount, combinator);
-
-        for (const combination of combinations) {
-            let result = values[0];
-
-            for (let i = 1; i < values.length; i++) {
-                result = calculate(result, values[i], combination[i - 1]);
-            }
-
-            if (result == answer) {
-                sum += answer;
-                break;
-            }
+        if (add(answer, 0, values, part2)) {
+            sum += answer;
         }
     }
 
@@ -54,35 +42,83 @@ function run(lines, combinator = false) {
 
 /**
  * 
- * @param {Number} delimCount 
- * @param {Boolean} combinator
- * @returns {Array}
+ * @param {Number} answer 
+ * @param {Number} result 
+ * @param {Array.<Number>} values 
+ * @param {Boolean} part2 
+ * @returns {Boolean}
  */
-function getCombinations(delimCount, combinator) {
-    const combinations = ['+', '*'];
-
-    if (combinator) {
-        combinations.push('|');
-    }
-
-    for (let i = 0; i < delimCount - 1; i++) {
-        const length = combinations.length;
-
-        for (let j = 0; j < length; j++) {
-            if (combinator) {
-                const col = combinations[j] + '|';
-                combinations.push(col);
-            }
-
-            const mul = combinations[j] + '*';
-            combinations[j] += '+';
-            combinations.push(mul);
+function add(answer, result, values, part2) {
+    if (values.length === 0) {
+        if (result === answer) {
+            return true;
         }
+        return false;
     }
 
-    return combinations;
+    result = calculate(result, values[0], '+');
+    values = values.slice(1);
+
+    return add(answer, result, values, part2)
+        || mul(answer, result, values, part2)
+        || (part2 ? comb(answer, result, values, part2) : false);
 }
 
+/**
+ * 
+ * @param {Number} answer 
+ * @param {Number} result 
+ * @param {Array.<Number>} values 
+ * @param {Boolean} part2 
+ * @returns {Boolean}
+ */
+function mul(answer, result, values, part2) {
+    if (values.length === 0) {
+        if (result === answer) {
+            return true;
+        }
+        return false;
+    }
+
+    result = calculate(result, values[0], '*');
+    values = values.slice(1);
+
+    return add(answer, result, values, part2)
+        || mul(answer, result, values, part2)
+        || (part2 ? comb(answer, result, values, part2) : false);
+}
+
+/**
+ * 
+ * @param {Number} answer 
+ * @param {Number} result 
+ * @param {Array.<Number>} values 
+ * @param {Boolean} part2 
+ * @returns {Boolean}
+ */
+function comb(answer, result, values, part2) {
+    if (values.length === 0) {
+        if (result === answer) {
+            return true;
+        }
+        return false;
+    }
+
+    result = calculate(result, values[0], '|');
+    values = values.slice(1);
+
+    return add(answer, result, values, part2)
+        || mul(answer, result, values, part2)
+        || (part2 ? comb(answer, result, values, part2) : false);
+}
+
+/**
+ * 
+ * @param {Number} result 
+ * @param {Number} value 
+ * @param {String} delimeter 
+ * @returns {Number}
+ */
 function calculate(result, value, delimeter) {
     if (delimeter === '+') {
         return result += value;
